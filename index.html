@@ -1,59 +1,108 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-    <title>Promises</title>
+        <title>Promises</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="style.css" rel="stylesheet">
-  </head>
+        <style>
+            body {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
 
-  <body>
-    <div class="container">
+            h3 {
+                margin-top: 2rem;
+            }
 
-      <h1>Promises</h1>
-      <p class="lead">Basic grid layouts to get you familiar with building within the Bootstrap grid system.</p>
+            .row {
+                margin-bottom: 1rem;
+            }
+            .row .row {
+                margin-top: 1rem;
+                margin-bottom: 0;
+            }
 
-      <h3>Five grid tiers</h3>
-      <p>There are five tiers to the Bootstrap grid system, one for each range of devices we support. Each tier starts at a minimum viewport size and automatically applies to the larger devices unless overridden.</p>
+            hr {
+                margin-top: 2rem;
+                margin-bottom: 2rem;
+            }
+        </style>
 
-      <div class="row">
-        <div class="col-4">.col-4</div>
-        <div class="col-4">.col-4</div>
-        <div class="col-4">.col-4</div>
-      </div>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    </head>
 
-      <div class="row">
-        <div class="col-sm-4">.col-sm-4</div>
-        <div class="col-sm-4">.col-sm-4</div>
-        <div class="col-sm-4">.col-sm-4</div>
-      </div>
+    <body>
+        <div class="container">
 
-      <div class="row">
-        <div class="col-md-4">.col-md-4</div>
-        <div class="col-md-4">.col-md-4</div>
-        <div class="col-md-4">.col-md-4</div>
-      </div>
+            <h1>Promises</h1>
 
-      <div class="row">
-        <div class="col-lg-4">.col-lg-4</div>
-        <div class="col-lg-4">.col-lg-4</div>
-        <div class="col-lg-4">.col-lg-4</div>
-      </div>
+            <h3>Browser support & polyfill</h3>
 
-      <div class="row">
-        <div class="col-xl-4">.col-xl-4</div>
-        <div class="col-xl-4">.col-xl-4</div>
-        <div class="col-xl-4">.col-xl-4</div>
-      </div>
+            <h3>Object</h3>
+            <p>
+                The Promise object represents the eventual completion (or failure) of an asynchronous operation, and its resulting value.
+            </p>
 
-    </div> <!-- /container -->
-  </body>
+            <h3>States</h3>
+            <p>
+                <span>
+                    <li>pending: initial state, neither fulfilled nor rejected.</li>
+                    <li>fulfilled: meaning that the operation completed successfully.</li>
+                    <li>rejected: meaning that the operation failed.</li>
+                </span>
+            </p>
+            <div>
+                <pre class="prettyprint lang-js">var promise = new Promise(function(resolve, reject) {
+  setTimeout(function() {
+    resolve('resolvedValue');
+  }, 300);
+});
+
+promise.then(function(value) {
+  console.log(value);
+  // expected output: "resolvedValue"
+});
+
+console.log(promise);
+// expected output: Promise {&lt;pending&gt;}
+
+setTimeout(function() {
+    console.log(promise);
+}, 500);
+// expected output: Promise {&lt;resolved&gt;: "resolvedValue"}</pre>
+                <button type="button" class="btn btn-dark code-run">Run</button>
+            </div>
+
+            <h3>Waiting for multiples Promises</h3>
+            
+            
+            <br/>
+            <br/>
+            
+            <h4>Links:</h4>
+            <small>
+                <li><a href="https://javascript.info/promise-basics">https://javascript.info/promise-basics</a></li>
+            </small>
+
+        </div> <!-- /container -->
+
+
+        <script>
+            var runElements = document.querySelectorAll('.code-run');
+            runElements.forEach(function (elem) {
+                elem.addEventListener("click", function () {
+                    var code = this.parentElement.querySelector('pre').textContent;
+                    var s = document.createElement('script');
+                    s.textContent = code;
+                    document.body.appendChild(s);
+                });
+            });
+        </script>
+    </body>
 </html>
