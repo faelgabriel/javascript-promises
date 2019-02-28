@@ -42,23 +42,33 @@
 
             <h1>Promises</h1>
 
-            <h3>Browser support & polyfill</h3>
-
             <h3>Object</h3>
             <p>
                 The Promise object represents the eventual completion (or failure) of an asynchronous operation, and its resulting value.
             </p>
+            <div>
+<pre class="prettyprint lang-js">
+var promise = new Promise(function(resolve, reject) {
+  // executor (the producing code, "singer")
+});
+</pre>
+            </div>
 
             <h3>States</h3>
             <p>
                 <span>
-                    <li>pending: initial state, neither fulfilled nor rejected.</li>
-                    <li>fulfilled: meaning that the operation completed successfully.</li>
-                    <li>rejected: meaning that the operation failed.</li>
+                    <li><b>pending</b>: initial state, neither fulfilled nor rejected.</li>
+                    <li><b>fulfilled</b>: meaning that the operation completed successfully.</li>
+                    <li><b>rejected</b>: meaning that the operation failed.</li>
                 </span>
+                <div>
+                    <img src="https://javascript.info/article/promise-basics/promise-resolve-reject.png" alt="" width="484" height="233" class="image__image">
+                </div>
             </p>
             <div>
-                <pre class="prettyprint lang-js">var promise = new Promise(function(resolve, reject) {
+            <p>Handler <b>.then()</b>:</p>
+<pre class="prettyprint lang-js">
+var promise = new Promise(function(resolve, reject) {
   setTimeout(function() {
     resolve('resolvedValue');
   }, 300);
@@ -66,8 +76,8 @@
 
 promise.then(function(value) {
   console.log(value);
-  // expected output: "resolvedValue"
 });
+// expected output: "resolvedValue"
 
 console.log(promise);
 // expected output: Promise {&lt;pending&gt;}
@@ -75,11 +85,125 @@ console.log(promise);
 setTimeout(function() {
     console.log(promise);
 }, 500);
-// expected output: Promise {&lt;resolved&gt;: "resolvedValue"}</pre>
+// expected output: Promise {&lt;resolved&gt;: "resolvedValue"}
+</pre>
+                <button type="button" class="btn btn-dark code-run">Run</button>
+            </div>
+            
+            <br/>
+            <p>Handlers of <b>.then()</b>/<b>.catch()</b> are always asynchronous:</p>
+            <div>
+<pre class="prettyprint lang-js">
+// an "immediately" resolved Promise
+var promise = new Promise(function(resolve, reject) {
+  resolve('resolvedValue');
+});
+
+promise.then(function(value) {
+  console.log(value);
+});
+// this message shows last (*)
+
+console.log("Code finished");
+// this message shows first
+</pre>
                 <button type="button" class="btn btn-dark code-run">Run</button>
             </div>
 
-            <h3>Waiting for multiples Promises</h3>
+            <h3>Errors</h3>
+            <p>Forcing an error:</p>
+            <div>
+<pre class="prettyprint lang-js">
+var promise = new Promise(function(resolve, reject) {
+  reject(new Error("Whoops!"));
+});
+
+promise.catch(function(value) {
+  console.log(value);
+});
+// expected output: "Error: Whoops!"
+</pre>
+                <button type="button" class="btn btn-dark code-run">Run</button>
+            </div>
+            <br/>
+            <p>Making the Promise code reliable:</p>
+            <div>
+<pre class="prettyprint lang-js">
+var promise = new Promise(function(resolve, reject) {
+  try {
+    undefinedFunction();
+  } catch(e) {
+    reject(new Error(e));
+  }
+});
+
+promise.catch(function(value) {
+  console.log(value);
+});
+// expected output: "Error: ReferenceError: undefinedFunction is not defined"
+</pre>
+                <button type="button" class="btn btn-dark code-run">Run</button>
+            </div>
+            
+            <h3>Chaining</h3>
+            <p>Executing multiple asynchronous actions in a queue - With old native mode:</p>
+<pre class="prettyprint lang-js">
+doSomething(function(result) {
+  doSomethingElse(result, function(newResult) {
+    doThirdThing(newResult, function(finalResult) {
+      console.log('Got the final result: ' + finalResult);
+    }, failureCallback);
+  }, failureCallback);
+}, failureCallback);
+</pre>
+
+            <p>Executing multiple asynchronous actions in a queue - With modern functions:</p>
+<pre class="prettyprint lang-js">
+doSomething().then(function(result) {
+  return doSomethingElse(result);
+})
+.then(function(newResult) {
+  return doThirdThing(newResult);
+})
+.then(function(finalResult) {
+  console.log('Got the final result: ' + finalResult);
+})
+.catch(failureCallback);
+</pre>
+            
+            <p>Chaining after a catch:</p>
+            <div>
+<pre class="prettyprint lang-js">
+new Promise((resolve, reject) => {
+    console.log('Initial');
+    resolve();
+})
+.then(() => {
+    throw new Error('Something failed');
+    console.log('Do this');
+})
+.catch(() => {
+    console.log('Do that');
+})
+.then(() => {
+    console.log('Do this, no matter what happened before');
+});
+// expected output:
+//   Initial
+//   Do that
+//   Do this, no matter what happened before
+
+// Note: The text "Do this" is not displayed because the "Something failed" error caused a rejection.
+</pre>
+                <button type="button" class="btn btn-dark code-run">Run</button>
+            </div>
+            
+            <h3>Composition</h3>
+            
+            <p><b>Promise.resolve()</b> and <b>Promise.reject()</b> are shortcuts to manually create an already resolved or rejected promise respectively.</p>
+            <p><b>Promise.all()</b> and <b>Promise.race()</b> are two composition tools for running asynchronous operations in parallel.</p>
+            
+            <h3>Browser support & polyfill</h3>
             
             
             <br/>
@@ -88,9 +212,11 @@ setTimeout(function() {
             <h4>Links:</h4>
             <small>
                 <li><a href="https://javascript.info/promise-basics">https://javascript.info/promise-basics</a></li>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</a></li>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises</a></li>
             </small>
 
-        </div> <!-- /container -->
+        </div>
 
 
         <script>
