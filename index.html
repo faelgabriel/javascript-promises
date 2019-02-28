@@ -6,7 +6,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Promises</title>
+        <title>JavaScript Asynchronous</title>
 
         <link href="dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -40,7 +40,7 @@
     <body>
         <div class="container">
 
-            <h1>Promises</h1>
+            <h1>Promises (JavaScript ES6/ECMAScript 2015)</h1>
 
             <h3>Object</h3>
             <p>
@@ -213,12 +213,105 @@ new Promise((resolve, reject) => {
             </div>
             
             <h3>Composition</h3>
-            
             <p><b>Promise.resolve()</b> and <b>Promise.reject()</b> are shortcuts to manually create an already resolved or rejected promise respectively.</p>
             <p><b>Promise.all()</b> and <b>Promise.race()</b> are two composition tools for running asynchronous operations in parallel.</p>
+
+            <div>
+<pre class="prettyprint lang-js">
+var promise1 = Promise.resolve(3);
+var promise2 = 42;
+var promise3 = new Promise(function(resolve, reject) {
+  setTimeout(resolve, 100, 'foo');
+});
+Promise.all([promise1, promise2, promise3])
+  .then(function(values) {
+    console.log(values);
+  })
+  .catch(function(errors) {
+    console.log(errors);
+  }
+);
+// expected output: Array [3, 42, "foo"]
+
+var promise4 = Promise.reject(new Error('fail'));
+Promise.all([promise1, promise2, promise3, promise4])
+  .then(function(values) {
+    console.log(values);
+  })
+  .catch(function(errors) {
+    console.log(errors);
+  }
+);
+// expected output: Error: fail
+</pre>
+                <button type="button" class="btn btn-dark code-run">Run</button>
+            </div>
+            <br/>
+            <div>
+<pre class="prettyprint lang-js">
+Promise.race([
+  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Whoops!")), 2000)),
+  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+]).then(console.log);
+// expected output: 1
+</pre>
+                <button type="button" class="btn btn-dark code-run">Run</button>
+            </div>
             
             <h3>Browser support & polyfill</h3>
             
+            <p>
+                <div>
+                    <img src="images/caniuse.png" alt="" width="100%">
+                </div>
+            </p>
+            
+            <br/>
+            
+            <h1>Async Functions (JavaScript ES8/ECMAScript 2017)</h1>
+
+            <h3>Async function</h3>
+            <p>
+                The async function declaration defines an asynchronous function, which returns an AsyncFunction object. An asynchronous function is a function which operates asynchronously via the event loop, using an implicit Promise to return its result.
+            </p>
+            <div>
+<pre class="prettyprint lang-js">
+function resolveAfter2Seconds() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('resolved');
+    }, 2000);
+  });
+}
+
+async function asyncCall() {
+  console.log('calling');
+  var result = await resolveAfter2Seconds();
+  console.log(result);
+  // expected output: 'resolved'
+}
+
+asyncCall();
+
+asyncCall();
+</pre>
+                <button type="button" class="btn btn-dark code-run">Run</button>
+            </div>
+
+            <h3>Await</h3>
+            <p>
+                <b>await</b> is a new operator used to wait for a promise to resolve or reject. It can only be used inside an async function.
+            </p>
+            
+            
+            <h3>Browser support & polyfill</h3>
+            
+            <p>
+                <div>
+                    <img src="images/caniuse_async.png" alt="" width="100%">
+                </div>
+            </p>
             
             <br/>
             <br/>
@@ -228,6 +321,7 @@ new Promise((resolve, reject) => {
                 <li><a href="https://javascript.info/promise-basics">https://javascript.info/promise-basics</a></li>
                 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</a></li>
                 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises</a></li>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function</a></li>
             </small>
 
         </div>
