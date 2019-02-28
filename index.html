@@ -144,6 +144,20 @@ promise.catch(function(value) {
 </pre>
                 <button type="button" class="btn btn-dark code-run">Run</button>
             </div>
+            <br/>
+            <div>
+<pre class="prettyprint lang-js">
+var promise = new Promise(function(resolve, reject) {
+  resolve(undefinedFunction());
+});
+
+promise.catch(function(value) {
+  console.log(value);
+});
+// expected output: "Error: ReferenceError: undefinedFunction is not defined"
+</pre>
+                <button type="button" class="btn btn-dark code-run">Run</button>
+            </div>
             
             <h3>Chaining</h3>
             <p>Executing multiple asynchronous actions in a queue - With old native mode:</p>
